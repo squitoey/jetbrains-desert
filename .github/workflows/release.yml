@@ -21,7 +21,7 @@ jobs:
           java-version: 21
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       # The Marketplace rejects a version it has already seen, and the release
       # is named after the tag - so the two must agree before anything is built.
