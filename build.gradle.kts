@@ -138,3 +138,8 @@ val checkThemeParity = tasks.register("checkThemeParity") {
 
 tasks.named("verifyPlugin") { dependsOn(checkThemeParity) }
 tasks.named("buildPlugin") { dependsOn(checkThemeParity) }
+
+// verifyPluginSignature reads signPlugin's output. Gradle 9 rejects an
+// undeclared dependency between them, so running both in one invocation fails
+// unless the ordering is explicit.
+tasks.named("verifyPluginSignature") { dependsOn("signPlugin") }

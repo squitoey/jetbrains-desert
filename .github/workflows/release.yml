@@ -63,11 +63,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag="${GITHUB_REF#refs/tags/}"
+
+          # signPlugin writes a separate *-signed.zip next to the unsigned one.
+          # Ship the signed archive when it exists - the Marketplace requires
+          # it - and never both, which would just be confusing to install.
+          artifact=$(ls build/distributions/*-signed.zip 2>/dev/null | head -1)
+          if [ -z "$artifact" ]; then
+            artifact=$(ls build/distributions/*.zip | head -1)
+            echo "::warning::publishing an UNSIGNED archive - set the signing secrets"
+          fi
+          echo "attaching $artifact"
+
           gh release create "$tag" \
             --title="$tag" \
             --generate-notes \
             --draft \
-            build/distributions/*.zip
+            "$artifact"
 
 # Publishing to JetBrains Marketplace is deliberately left manual - the release
 # above is a draft, and `./gradlew publishPlugin` is a separate, deliberate

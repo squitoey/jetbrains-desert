@@ -104,24 +104,34 @@ your machine and which is never part of any repo.
 The Marketplace requires signed plugins. Generate a 4096-bit key and a
 self-signed certificate chain, somewhere outside this repo:
 
+Nothing here comes from JetBrains — you generate all of it, and the
+certificate is self-signed. The Marketplace only cares that successive uploads
+are signed by the *same* key.
+
 ```sh
 mkdir -p ~/.gradle/desert-signing && cd ~/.gradle/desert-signing
 
-# 1. private key, encrypted with a passphrase you choose
+# 1. private key, encrypted with a passphrase you choose (prompts twice)
 openssl genpkey -aes-256-cbc -algorithm RSA \
   -out private_encrypted.pem -pkeyopt rsa_keygen_bits:4096
 
-# 2. the unencrypted RSA form the signer actually reads
+# 2. a decrypted copy, only needed to generate the certificate below
 openssl rsa -in private_encrypted.pem -out private.pem
 
-# 3. the certificate chain
+# 3. the self-signed certificate chain
 openssl req -key private.pem -new -x509 -days 365 -out chain.crt
 
-chmod 600 private.pem private_encrypted.pem
+chmod 600 private_encrypted.pem private.pem
 ```
 
-Keep these files. Losing them means you cannot publish an update that the
-Marketplace will accept as the same author.
+**Sign with the encrypted key** (`private_encrypted.pem`) and the passphrase —
+that is what `desert.signing.password` is for. The signer accepts either form,
+but a decrypted key makes the passphrase pointless: anyone who gets the file
+can sign as you. `private.pem` is only needed for step 3; you can delete it
+afterwards.
+
+Keep `private_encrypted.pem` and `chain.crt`. Losing them means you cannot
+publish an update the Marketplace will accept as the same author.
 
 ### One-time: get a Marketplace token
 
@@ -136,7 +146,7 @@ Create the file if it does not exist:
 ```properties
 # JetBrains plugin signing (paths, not contents - `~` is expanded)
 desert.signing.certificateChainFile = ~/.gradle/desert-signing/chain.crt
-desert.signing.privateKeyFile       = ~/.gradle/desert-signing/private.pem
+desert.signing.privateKeyFile       = ~/.gradle/desert-signing/private_encrypted.pem
 desert.signing.password             = your-key-passphrase
 
 # JetBrains Marketplace
@@ -150,8 +160,8 @@ chmod 600 ~/.gradle/gradle.properties
 | Key | What it is |
 | --- | --- |
 | `desert.signing.certificateChainFile` | Path to `chain.crt` from step 3 |
-| `desert.signing.privateKeyFile` | Path to `private.pem` from step 2 |
-| `desert.signing.password` | The passphrase you chose in step 1 |
+| `desert.signing.privateKeyFile` | Path to `private_encrypted.pem` from step 1 |
+| `desert.signing.password` | The passphrase from step 1, which decrypts that key |
 | `desert.publishing.token` | Marketplace permanent token |
 
 These are **paths**, not file contents. The private key and certificate are
@@ -188,13 +198,16 @@ To check signing without publishing:
 ./gradlew signPlugin verifyPluginSignature
 ```
 
+That writes `build/distributions/desert-<version>-signed.zip` alongside the
+unsigned archive and verifies the signature on it. The release workflow
+attaches the signed one when it exists.
+
 Everything above is inert for ordinary builds. `buildPlugin` and `runIde` never
 read these properties, so you can ignore this whole section until you publish.
 
 ## Continuous integration
 
-Two workflows, mirroring the shape used by the Obsidian theme in this
-workspace.
+Two workflows.
 
 **`.github/workflows/build.yml`** — on every push and pull request, and on
 demand. Runs `checkThemeParity`, `verifyPluginProjectConfiguration`,
@@ -216,9 +229,17 @@ Settings → Secrets and variables → Actions:
 
 | Secret | Value |
 | --- | --- |
-| `PRIVATE_KEY` | Contents of `private.pem` |
+| `PRIVATE_KEY` | Contents of `private_encrypted.pem` |
 | `CERTIFICATE_CHAIN` | Contents of `chain.crt` |
 | `PRIVATE_KEY_PASSWORD` | The key passphrase |
+
+Set them from the files rather than pasting, which avoids mangling newlines:
+
+```sh
+gh secret set PRIVATE_KEY          < ~/.gradle/desert-signing/private_encrypted.pem
+gh secret set CERTIFICATE_CHAIN    < ~/.gradle/desert-signing/chain.crt
+gh secret set PRIVATE_KEY_PASSWORD          # prompts, nothing echoed
+```
 
 Paste the PEM files' full contents, `-----BEGIN`/`-----END` lines included.
 GitHub secrets hold multi-line values fine, so no base64 is needed. The
