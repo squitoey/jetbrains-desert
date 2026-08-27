@@ -191,6 +191,74 @@ To check signing without publishing:
 Everything above is inert for ordinary builds. `buildPlugin` and `runIde` never
 read these properties, so you can ignore this whole section until you publish.
 
+## Continuous integration
+
+Two workflows, mirroring the shape used by the Obsidian theme in this
+workspace.
+
+**`.github/workflows/build.yml`** — on every push and pull request, and on
+demand. Runs `checkThemeParity`, `verifyPluginProjectConfiguration`,
+`verifyPluginStructure` and `buildPlugin`, then uploads the distribution zip as
+a job artifact. No secrets needed.
+
+**`.github/workflows/release.yml`** — on a pushed tag. Checks the tag matches
+`pluginVersion` in `gradle.properties`, builds, signs if the secrets are
+present, and opens a **draft** GitHub release with the zip attached. Publish
+the draft yourself once you have read the notes.
+
+`.github/dependabot.yml` keeps the Gradle dependencies and the actions
+themselves up to date.
+
+### Repository secrets
+
+Only `release.yml` uses them, and only for signing. Set them under
+Settings → Secrets and variables → Actions:
+
+| Secret | Value |
+| --- | --- |
+| `PRIVATE_KEY` | Contents of `private.pem` |
+| `CERTIFICATE_CHAIN` | Contents of `chain.crt` |
+| `PRIVATE_KEY_PASSWORD` | The key passphrase |
+
+Paste the PEM files' full contents, `-----BEGIN`/`-----END` lines included.
+GitHub secrets hold multi-line values fine, so no base64 is needed. The
+workflow writes them to files under `$RUNNER_TEMP`, passes the paths to Gradle,
+and deletes them in the same step.
+
+If the secrets are absent the signing step is skipped and the release is still
+created, unsigned — useful on a fork, or before you have keys. The Marketplace
+requires a signed archive, so set them before publishing for real.
+
+There is no `PUBLISH_TOKEN` secret, because publishing is not automated. See
+[Signing and publishing](#signing-and-publishing).
+
+### What CI does not run
+
+`verifyPlugin` — the JetBrains Plugin Verifier — is not in either workflow. It
+downloads every IDE build in the supported range, which for `since-build=213`
+is around **47 GB**, far past what a CI cache can hold. It also checks *binary*
+compatibility, and a theme ships no bytecode (`compileJava` is `NO-SOURCE`), so
+there is little for it to find. Run it locally before a release:
+
+```sh
+./gradlew verifyPlugin
+```
+
+The last full run reported `Compatible` against all twelve builds from
+IC-213.7172.25 through IC-252.28539.97.
+
+### Two warnings you will see, and can ignore
+
+`verifyPluginProjectConfiguration` reports both on every run:
+
+- *since-build is lower than target platform version* — deliberate. The plugin
+  is built against `platformVersion` but supports back to `sinceBuild`, and the
+  Plugin Verifier confirms that range is real.
+- *Java targetCompatibility exceeds since-build requirements* — inapplicable.
+  There are no Java sources, so no bytecode is produced at any level.
+
+Neither fails the build.
+
 ## Layout
 
 ```
@@ -206,6 +274,9 @@ src/main/resources/
   themes/DesertLight.xml         editor colour scheme, light
 MAPPING.md                       every vim group → IntelliJ key, and why
 LICENSE                          MIT, plus attribution for the vim original
+.github/workflows/build.yml      check + build on push and PR
+.github/workflows/release.yml    tag → signed draft GitHub release
+.github/dependabot.yml           daily Gradle + actions updates
 ```
 
 Each `*.theme.json` is named after the `name` it declares, matching the

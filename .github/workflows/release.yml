@@ -1,0 +1,74 @@
+name: Release plugin
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # The Marketplace rejects a version it has already seen, and the release
+      # is named after the tag - so the two must agree before anything is built.
+      - name: Check the tag matches pluginVersion
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          version=$(sed -n 's/^pluginVersion[[:space:]]*=[[:space:]]*//p' gradle.properties | tr -d '[:space:]')
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag '$tag' does not match pluginVersion '$version' in gradle.properties"
+            exit 1
+          fi
+          echo "releasing $version"
+
+      - name: Build
+        run: ./gradlew --no-daemon checkThemeParity verifyPluginStructure buildPlugin
+
+      # Signing is skipped when the secrets are absent, so the workflow still
+      # produces a release on a fork or before keys are set up. See README >
+      # Signing and publishing for how to generate these.
+      - name: Sign
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
+          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+        if: env.PRIVATE_KEY != ''
+        run: |
+          dir="$RUNNER_TEMP/signing"
+          mkdir -p "$dir" && chmod 700 "$dir"
+          printf '%s' "$PRIVATE_KEY" > "$dir/private.pem"
+          printf '%s' "$CERTIFICATE_CHAIN" > "$dir/chain.crt"
+          chmod 600 "$dir"/*
+          ./gradlew --no-daemon signPlugin verifyPluginSignature \
+            -Pdesert.signing.privateKeyFile="$dir/private.pem" \
+            -Pdesert.signing.certificateChainFile="$dir/chain.crt"
+          rm -rf "$dir"
+
+      - name: Create draft release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          gh release create "$tag" \
+            --title="$tag" \
+            --generate-notes \
+            --draft \
+            build/distributions/*.zip
+
+# Publishing to JetBrains Marketplace is deliberately left manual - the release
+# above is a draft, and `./gradlew publishPlugin` is a separate, deliberate
+# step. See README > Signing and publishing.

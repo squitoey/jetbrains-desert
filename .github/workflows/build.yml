@@ -1,0 +1,51 @@
+name: Build plugin
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # checkThemeParity guards against the dark and light themes drifting
+      # apart; verifyPluginStructure checks plugin.xml and the archive layout.
+      # buildPlugin depends on checkThemeParity, but naming it here makes a
+      # parity failure obvious in the job log.
+      - name: Check and build
+        run: >
+          ./gradlew --no-daemon
+          checkThemeParity
+          verifyPluginProjectConfiguration
+          verifyPluginStructure
+          buildPlugin
+
+      - name: Upload plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-distribution
+          path: build/distributions/*.zip
+          if-no-files-found: error
+
+# Note: `verifyPlugin` (the JetBrains Plugin Verifier) is deliberately NOT run
+# here. It downloads every IDE build in the supported range - around 47 GB for
+# since-build=213 - which no CI cache can hold. It also checks binary
+# compatibility, and a theme contains no bytecode at all (`compileJava` is
+# NO-SOURCE), so it has little to tell us. Run it locally before a release:
+#
+#     ./gradlew verifyPlugin
