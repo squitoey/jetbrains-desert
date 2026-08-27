@@ -1,0 +1,688 @@
+{
+  "name": "Desert Light",
+  "author": "Derived from desert.vim by Hans Fugal",
+  "dark": false,
+  "editorScheme": "/themes/DesertLight.xml",
+  "colors": {
+    "desertBg": "#f2f0e6",
+    "desertBgPanel": "#e6e3d6",
+    "desertBgSunken": "#dcd9c8",
+    "desertBgRaised": "#eae8dc",
+    "desertBgHover": "#dcd9c8",
+    "desertBorder": "#d2cfbb",
+    "desertBorderLight": "#c2bfa5",
+    "desertFg": "#2b2a22",
+    "desertFgDim": "#55523f",
+    "desertFgMuted": "#8f8c74",
+    "desertFgDisabled": "#aaa78d",
+    "desertSand": "#8a8562",
+    "desertKhaki": "#8a7d0f",
+    "desertDarkKhaki": "#6f6a1e",
+    "desertOlive": "#5a7a1e",
+    "desertOliveDim": "#dcecc8",
+    "desertPaleGreen": "#22701f",
+    "desertSkyBlue": "#1c7099",
+    "desertLightBlue": "#155873",
+    "desertIndianRed": "#93372c",
+    "desertSalmon": "#a6435a",
+    "desertOrangeRed": "#c03000",
+    "desertGoldenrod": "#98661b",
+    "desertGold": "#8a6a00",
+    "desertSelectionBg": "#ccd5b0",
+    "desertSelectionFg": "#4a4410",
+    "desertSelectionInactiveBg": "#dcd9c8",
+    "desertStatusBarBg": "#e6e3d6",
+    "desertStatusBarFg": "#55523f"
+  },
+  "ui": {
+    "*": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "infoForeground": "desertFgMuted",
+      "errorForeground": "desertOrangeRed",
+      "modifiedItemForeground": "desertSkyBlue",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "selectionBackgroundInactive": "desertSelectionInactiveBg",
+      "selectionInactiveBackground": "desertSelectionInactiveBg",
+      "selectionInactiveForeground": "desertFg",
+      "lightSelectionBackground": "desertBgHover",
+      "hoverBackground": "desertBgHover",
+      "inactiveBackground": "desertBgPanel",
+      "disabledBackground": "desertBgPanel",
+      "disabledForeground": "desertFgDisabled",
+      "disabledText": "desertFgDisabled",
+      "inactiveForeground": "desertFgMuted",
+      "acceleratorForeground": "desertFgMuted",
+      "acceleratorSelectionForeground": "desertSelectionFg",
+      "borderColor": "desertBorder",
+      "disabledBorderColor": "desertBorder",
+      "focusColor": "desertSand",
+      "focusedBorderColor": "desertSand",
+      "separatorColor": "desertBorder"
+    },
+    "ActionButton": {
+      "hoverBackground": "desertBgHover",
+      "hoverBorderColor": "desertBgHover",
+      "pressedBackground": "desertBorderLight",
+      "pressedBorderColor": "desertBorderLight"
+    },
+    "Borders": {
+      "color": "desertBorder",
+      "ContrastBorderColor": "desertBgSunken"
+    },
+    "Button": {
+      "background": "desertBgRaised",
+      "foreground": "desertFg",
+      "startBackground": "desertBgRaised",
+      "endBackground": "desertBgRaised",
+      "startBorderColor": "desertBorderLight",
+      "endBorderColor": "desertBorderLight",
+      "focusedBorderColor": "desertSand",
+      "disabledBorderColor": "desertBorder",
+      "default": {
+        "foreground": "#f2f0e6",
+        "startBackground": "desertSand",
+        "endBackground": "desertSand",
+        "startBorderColor": "desertSand",
+        "endBorderColor": "desertSand",
+        "focusedBorderColor": "desertKhaki",
+        "focusColor": "desertKhaki",
+        "shadowColor": "#00000000"
+      }
+    },
+    "CheckBox": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "disabledText": "desertFgDisabled"
+    },
+    "ComboBox": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "nonEditableBackground": "desertBgRaised",
+      "modifiedItemForeground": "desertKhaki",
+      "ArrowButton": {
+        "background": "desertBgRaised",
+        "nonEditableBackground": "desertBgRaised",
+        "iconColor": "desertFgDim",
+        "disabledIconColor": "desertFgDisabled"
+      },
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg"
+    },
+    "ComboBoxButton": {
+      "background": "desertBgRaised"
+    },
+    "CompletionPopup": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "selectionBackground": "desertSelectionBg",
+      "selectionInactiveBackground": "desertSelectionInactiveBg",
+      "matchForeground": "desertKhaki",
+      "matchSelectionForeground": "desertGold"
+    },
+    "Component": {
+      "borderColor": "desertBorderLight",
+      "disabledBorderColor": "desertBorder",
+      "focusedBorderColor": "desertSand",
+      "focusColor": "desertSand",
+      "errorFocusColor": "desertOrangeRed",
+      "inactiveErrorFocusColor": "desertIndianRed",
+      "warningFocusColor": "desertGoldenrod",
+      "inactiveWarningFocusColor": "desertDarkKhaki",
+      "infoForeground": "desertFgMuted",
+      "iconColor": "desertFgDim"
+    },
+    "Counter": {
+      "background": "desertSand",
+      "foreground": "#f2f0e6"
+    },
+    "DefaultTabs": {
+      "background": "desertBgPanel",
+      "borderColor": "desertBorder",
+      "hoverBackground": "desertBgHover",
+      "underlinedTabBackground": "desertBg",
+      "underlinedTabForeground": "desertFg",
+      "underlineColor": "desertSand",
+      "inactiveUnderlineColor": "desertBorderLight",
+      "inactiveColoredTabBackground": "desertBgPanel"
+    },
+    "Editor": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "shortcutForeground": "desertKhaki"
+    },
+    "EditorTabs": {
+      "background": "desertBgPanel",
+      "borderColor": "desertBorder",
+      "hoverBackground": "desertBgHover",
+      "underlinedTabBackground": "desertBg",
+      "underlinedTabForeground": "desertFg",
+      "underlineColor": "desertSand",
+      "inactiveUnderlineColor": "desertBorderLight",
+      "selectedBackground": "desertBg",
+      "selectedForeground": "desertFg",
+      "inactiveColoredFileBackground": "desertBgPanel"
+    },
+    "Group": {
+      "separatorColor": "desertBorder"
+    },
+    "Label": {
+      "foreground": "desertFg",
+      "disabledForeground": "desertFgDisabled",
+      "infoForeground": "desertFgMuted",
+      "errorForeground": "desertOrangeRed",
+      "selectedForeground": "desertSelectionFg"
+    },
+    "Link": {
+      "activeForeground": "desertSkyBlue",
+      "hoverForeground": "desertLightBlue",
+      "pressedForeground": "desertLightBlue",
+      "visitedForeground": "desertLightBlue",
+      "secondaryForeground": "desertFgDim"
+    },
+    "List": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "hoverBackground": "desertBgHover",
+      "hoverInactiveBackground": "desertBgHover",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "selectionInactiveBackground": "desertSelectionInactiveBg",
+      "selectionInactiveForeground": "desertFg"
+    },
+    "MainMenu": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg"
+    },
+    "MenuBar": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "borderColor": "desertBorder",
+      "highlight": "desertBgHover",
+      "shadow": "desertBgSunken",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "disabledForeground": "desertFgDisabled"
+    },
+    "Menu": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "borderColor": "desertBorder",
+      "separatorColor": "desertBorder",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "disabledForeground": "desertFgDisabled"
+    },
+    "MenuItem": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "disabledForeground": "desertFgDisabled",
+      "acceleratorForeground": "desertFgMuted",
+      "acceleratorSelectionForeground": "desertSelectionFg"
+    },
+    "PopupMenu": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "borderColor": "desertBorder",
+      "translucentBackground": "desertBgPanel"
+    },
+    "PopupMenuSeparator": {
+      "background": "desertBgPanel"
+    },
+    "CheckBoxMenuItem": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "acceleratorForeground": "desertFgMuted"
+    },
+    "RadioButtonMenuItem": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "acceleratorForeground": "desertFgMuted"
+    },
+    "NavBar": {
+      "borderColor": "desertBorder"
+    },
+    "Notification": {
+      "background": "desertBgRaised",
+      "foreground": "desertFg",
+      "borderColor": "desertBorderLight",
+      "errorBackground": "#f2d9d5",
+      "errorForeground": "desertFg",
+      "errorBorderColor": "desertIndianRed",
+      "linkForeground": "desertSkyBlue",
+      "MoreButton": {
+        "background": "desertBgHover",
+        "innerBorderColor": "desertBorderLight",
+        "foreground": "desertFgDim"
+      },
+      "ToolWindow": {
+        "informativeBackground": "desertBgRaised",
+        "informativeForeground": "desertFg",
+        "informativeBorderColor": "desertBorderLight",
+        "warningBackground": "#f0e4c8",
+        "warningForeground": "desertFg",
+        "warningBorderColor": "desertGoldenrod",
+        "errorBackground": "#f2d9d5",
+        "errorForeground": "desertFg",
+        "errorBorderColor": "desertIndianRed"
+      }
+    },
+    "Panel": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg"
+    },
+    "Plugins": {
+      "background": "desertBgPanel",
+      "borderColor": "desertBorder",
+      "hoverBackground": "desertBgHover",
+      "lightSelectionBackground": "desertBgHover",
+      "disabledForeground": "desertFgDisabled",
+      "tagForeground": "desertFgDim",
+      "tagBackground": "desertBgHover",
+      "SearchField": {
+        "background": "desertBg"
+      },
+      "SectionHeader": {
+        "foreground": "desertFgDim",
+        "background": "desertBgPanel"
+      },
+      "Button": {
+        "installBackground": "desertBgPanel",
+        "installBorderColor": "desertOlive",
+        "installForeground": "desertPaleGreen",
+        "installFocusedBackground": "desertOliveDim",
+        "updateBackground": "desertSand",
+        "updateBorderColor": "desertSand",
+        "updateForeground": "#f2f0e6"
+      }
+    },
+    "Popup": {
+      "background": "desertBgPanel",
+      "borderColor": "desertBorderLight",
+      "separatorColor": "desertBorder",
+      "separatorForeground": "desertFgMuted",
+      "paintBorder": true,
+      "Header": {
+        "activeBackground": "desertBgRaised",
+        "inactiveBackground": "desertBgPanel"
+      },
+      "Toolbar": {
+        "background": "desertBgPanel",
+        "borderColor": "desertBorder"
+      },
+      "Advertiser": {
+        "background": "desertBgPanel",
+        "foreground": "desertFgMuted",
+        "borderColor": "desertBorder"
+      },
+      "inactiveBorderColor": "desertBorder"
+    },
+    "ProgressBar": {
+      "background": "desertBorder",
+      "trackColor": "desertBorder",
+      "progressColor": "desertSand",
+      "indeterminateStartColor": "desertSand",
+      "indeterminateEndColor": "desertOlive",
+      "failedColor": "desertIndianRed",
+      "failedEndColor": "desertSalmon",
+      "passedColor": "desertOlive",
+      "passedEndColor": "desertPaleGreen"
+    },
+    "RadioButton": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "disabledText": "desertFgDisabled"
+    },
+    "ScrollBar": {
+      "background": "desertBg",
+      "thumbColor": "#8f8c7480",
+      "thumbBorderColor": "#8f8c7480",
+      "hoverThumbColor": "#55523faa",
+      "hoverThumbBorderColor": "#55523faa",
+      "trackColor": "#00000000",
+      "Transparent": {
+        "thumbColor": "#8f8c7480",
+        "thumbBorderColor": "#8f8c7480",
+        "hoverThumbColor": "#55523faa",
+        "hoverThumbBorderColor": "#55523faa",
+        "trackColor": "#00000000"
+      },
+      "Mac": {
+        "thumbColor": "#8f8c7480",
+        "thumbBorderColor": "#8f8c7480",
+        "hoverThumbColor": "#55523faa",
+        "hoverThumbBorderColor": "#55523faa",
+        "trackColor": "#00000000",
+        "Transparent": {
+          "thumbColor": "#8f8c7480",
+          "thumbBorderColor": "#8f8c7480",
+          "hoverThumbColor": "#55523faa",
+          "hoverThumbBorderColor": "#55523faa",
+          "trackColor": "#00000000"
+        }
+      }
+    },
+    "SearchEverywhere": {
+      "SearchField": {
+        "background": "desertBg",
+        "borderColor": "desertBorderLight",
+        "infoForeground": "desertFgMuted"
+      },
+      "Header": {
+        "background": "desertBgPanel"
+      },
+      "Tab": {
+        "selectedBackground": "desertBgHover",
+        "selectedForeground": "desertKhaki"
+      },
+      "List": {
+        "separatorColor": "desertBorder",
+        "separatorForeground": "desertFgMuted"
+      },
+      "Advertiser": {
+        "background": "desertBgPanel",
+        "foreground": "desertFgMuted"
+      }
+    },
+    "SearchMatch": {
+      "startBackground": "desertOlive",
+      "endBackground": "#c8dca0",
+      "startColor": "desertOlive",
+      "endColor": "#c8dca0"
+    },
+    "Separator": {
+      "separatorColor": "desertBorder",
+      "foreground": "desertBorder"
+    },
+    "Slider": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "trackColor": "desertBorder",
+      "buttonColor": "desertSand",
+      "buttonBorderColor": "desertSand",
+      "tickColor": "desertFgMuted"
+    },
+    "SplitPane": {
+      "background": "desertBorder",
+      "highlight": "desertBorder"
+    },
+    "SplitPaneDivider": {
+      "draggingColor": "desertSand"
+    },
+    "StatusBar": {
+      "background": "desertStatusBarBg",
+      "foreground": "desertStatusBarFg",
+      "borderColor": "desertBorder",
+      "hoverBackground": "desertBgHover"
+    },
+    "TabbedPane": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "contentAreaColor": "desertBorder",
+      "focusColor": "desertBgHover",
+      "hoverColor": "desertBgHover",
+      "underlineColor": "desertSand",
+      "disabledUnderlineColor": "desertBorderLight",
+      "disabledForeground": "desertFgDisabled",
+      "selectedForeground": "desertFg"
+    },
+    "Table": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "gridColor": "desertBorder",
+      "stripeColor": "desertBg",
+      "hoverBackground": "desertBgHover",
+      "hoverInactiveBackground": "desertBgHover",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "selectionInactiveBackground": "desertSelectionInactiveBg",
+      "selectionInactiveForeground": "desertFg",
+      "focusCellBackground": "desertBgHover",
+      "focusCellForeground": "desertFg",
+      "dropLineColor": "desertSand",
+      "lightSelectionBackground": "desertBgHover"
+    },
+    "TableHeader": {
+      "background": "desertBgPanel",
+      "foreground": "desertFgDim",
+      "borderColor": "desertBorder",
+      "bottomSeparatorColor": "desertBorder",
+      "separatorColor": "desertBorder"
+    },
+    "TextArea": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "caretForeground": "desertIndianRed",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "inactiveForeground": "desertFgMuted"
+    },
+    "TextField": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "caretForeground": "desertIndianRed",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "inactiveForeground": "desertFgMuted",
+      "disabledBackground": "desertBgPanel"
+    },
+    "FormattedTextField": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "caretForeground": "desertIndianRed",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "inactiveForeground": "desertFgMuted"
+    },
+    "PasswordField": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "caretForeground": "desertIndianRed",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg"
+    },
+    "EditorPane": {
+      "background": "desertBg",
+      "foreground": "desertFg",
+      "caretForeground": "desertIndianRed",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "inactiveForeground": "desertFgMuted"
+    },
+    "SearchField": {
+      "background": "desertBg",
+      "foreground": "desertFg"
+    },
+    "TitlePane": {
+      "background": "desertBgPanel",
+      "inactiveBackground": "desertBgPanel",
+      "foreground": "desertFg",
+      "inactiveForeground": "desertFgMuted",
+      "infoForeground": "desertFgMuted",
+      "inactiveInfoForeground": "desertFgDisabled",
+      "borderColor": "desertBorder",
+      "inactiveBorderColor": "desertBorder",
+      "Button": {
+        "hoverBackground": "desertBgHover"
+      }
+    },
+    "ToggleButton": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "onBackground": "desertOlive",
+      "onForeground": "desertSelectionFg",
+      "offBackground": "desertBorder",
+      "offForeground": "desertFgMuted",
+      "buttonColor": "desertSand",
+      "borderColor": "desertBorderLight",
+      "disabledText": "desertFgDisabled"
+    },
+    "ToolBar": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "borderHandleColor": "desertBorderLight",
+      "floatingForeground": "desertFgDim"
+    },
+    "ToolTip": {
+      "background": "desertBgRaised",
+      "foreground": "desertFg",
+      "borderColor": "desertBorderLight",
+      "infoForeground": "desertFgMuted",
+      "shortcutForeground": "desertKhaki",
+      "Actions": {
+        "background": "desertBgPanel"
+      },
+      "separatorColor": "desertBorder"
+    },
+    "ToolWindow": {
+      "background": "desertBgPanel",
+      "Button": {
+        "hoverBackground": "desertBgHover",
+        "selectedBackground": "desertBgHover",
+        "selectedForeground": "desertKhaki"
+      },
+      "Header": {
+        "background": "desertBgPanel",
+        "inactiveBackground": "desertBgPanel",
+        "borderColor": "desertBorder",
+        "foreground": "desertFgDim",
+        "inactiveForeground": "desertFgMuted"
+      },
+      "HeaderTab": {
+        "underlinedTabBackground": "desertBgHover",
+        "underlinedTabInactiveBackground": "desertBgPanel",
+        "underlineColor": "desertSand",
+        "inactiveUnderlineColor": "desertBorderLight",
+        "hoverBackground": "desertBgHover",
+        "selectedForeground": "desertFg",
+        "selectedInactiveForeground": "desertFgDim"
+      },
+      "HeaderCloseButton": {
+        "background": "desertBgHover"
+      }
+    },
+    "Tree": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "hash": "desertBorder",
+      "hoverBackground": "desertBgHover",
+      "hoverInactiveBackground": "desertBgHover",
+      "selectionBackground": "desertSelectionBg",
+      "selectionForeground": "desertSelectionFg",
+      "selectionInactiveBackground": "desertSelectionInactiveBg",
+      "selectionInactiveForeground": "desertFg",
+      "modifiedItemForeground": "desertSkyBlue",
+      "errorForeground": "desertOrangeRed"
+    },
+    "ValidationTooltip": {
+      "errorBackground": "#f2d9d5",
+      "errorBorderColor": "desertIndianRed",
+      "warningBackground": "#f0e4c8",
+      "warningBorderColor": "desertGoldenrod"
+    },
+    "VersionControl": {
+      "FileHistory": {
+        "Commit": {
+          "selectedBranchBackground": "desertOliveDim"
+        }
+      },
+      "Log": {
+        "Commit": {
+          "currentBranchBackground": "desertOliveDim",
+          "unmatchedForeground": "desertFgMuted",
+          "hoveredBackground": "desertBgHover"
+        }
+      },
+      "RefLabel": {
+        "foreground": "#f2f0e6",
+        "backgroundBase": "desertSand"
+      },
+      "GitLog": {
+        "headIconColor": "desertGold",
+        "localBranchIconColor": "desertPaleGreen",
+        "remoteBranchIconColor": "desertSkyBlue",
+        "tagIconColor": "desertKhaki",
+        "otherIconColor": "desertFgDim"
+      }
+    },
+    "Viewport": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg"
+    },
+    "WelcomeScreen": {
+      "background": "desertBgPanel",
+      "borderColor": "desertBorder",
+      "separatorColor": "desertBorder",
+      "captionBackground": "desertBgPanel",
+      "captionForeground": "desertFgDim",
+      "footerBackground": "desertBgPanel",
+      "footerForeground": "desertFgMuted",
+      "headerBackground": "desertBgPanel",
+      "headerForeground": "desertFgDim",
+      "Projects": {
+        "background": "desertBgPanel",
+        "selectionBackground": "desertSelectionBg",
+        "selectionInactiveBackground": "desertSelectionInactiveBg",
+        "actions": {
+          "background": "desertBgPanel",
+          "selectionBackground": "desertSelectionBg"
+        }
+      }
+    },
+    "Window": {
+      "border": "desertBorder"
+    },
+    "OptionPane": {
+      "background": "desertBgPanel",
+      "foreground": "desertFg",
+      "messageForeground": "desertFg"
+    },
+    "FileColor": {
+      "Blue": "#dce6f0",
+      "Green": "#dfeacf",
+      "Orange": "#f0e2cc",
+      "Rose": "#f4dcdc",
+      "Violet": "#e6dff0",
+      "Yellow": "#efeacb"
+    }
+  },
+  "icons": {
+    "ColorPalette": {
+      "Actions.Blue": "#1c7099",
+      "Actions.Green": "#22701f",
+      "Actions.Grey": "#55523f",
+      "Actions.GreyInline": "#55523f",
+      "Actions.GreyInline.Dark": "#55523f",
+      "Actions.Red": "#93372c",
+      "Actions.Yellow": "#8a7d0f",
+      "Objects.Blue": "#1c7099",
+      "Objects.Green": "#22701f",
+      "Objects.GreenAndroid": "#3a6b1a",
+      "Objects.Grey": "#55523f",
+      "Objects.Pink": "#a63030",
+      "Objects.Purple": "#8a4a5a",
+      "Objects.Red": "#93372c",
+      "Objects.RedStatus": "#c03000",
+      "Objects.Yellow": "#8a7d0f",
+      "Objects.YellowDark": "#98661b",
+      "Objects.BlackText": "#2b2a22",
+      "Checkbox.Background.Default": "#ffffff",
+      "Checkbox.Background.Disabled": "#e6e3d6",
+      "Checkbox.Border.Default": "#aaa78d",
+      "Checkbox.Border.Disabled": "#d2cfbb",
+      "Checkbox.Focus.Thin.Default": "#8a8562",
+      "Checkbox.Focus.Wide": "#8a8562",
+      "Checkbox.Foreground.Selected": "#2b2a22",
+      "Checkbox.Foreground.Disabled": "#aaa78d"
+    }
+  }
+}

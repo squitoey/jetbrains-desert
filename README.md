@@ -1,4 +1,4 @@
-# Desert for JetBrains IDEs
+# Desert Theme for JetBrains IDEs
 
 A port of Hans Fugal's [desert.vim](https://github.com/fugalh/desert.vim) (2003)
 to the JetBrains platform — warm sand and khaki on soft charcoal, sky-blue
@@ -12,64 +12,205 @@ The plugin declares only `com.intellij.modules.platform`, so it installs in
 **every** JetBrains IDE: IntelliJ IDEA, PyCharm, WebStorm, PhpStorm, GoLand,
 RubyMine, CLion, Rider, DataGrip, RustRover, Aqua, Android Studio.
 
+## Requirements
+
+A JDK (17 or newer) and Gradle. Gradle is not bundled here — there is no
+committed wrapper, because generating one requires Gradle in the first place.
+Get it either way:
+
+**Install Gradle, then generate the wrapper once:**
+
+```sh
+brew install gradle     # or: sdk install gradle
+gradle wrapper          # writes ./gradlew, gradle/wrapper/ — commit these
+```
+
+After that everyone uses `./gradlew` and nobody needs Gradle installed.
+
+**Or open the project in IntelliJ IDEA.** It ships its own Gradle, imports the
+project on open, and lists every task below in the Gradle tool window
+(View → Tool Windows → Gradle).
+
 ## Build
 
 ```sh
-./build.sh
+./gradlew buildPlugin
 ```
 
-No JDK or Gradle required — a theme plugin is pure resources, and `build.sh`
-validates then zips them. It produces:
+Produces `build/distributions/desert-1.1.0.zip` — the installable plugin,
+containing both themes and both editor schemes.
 
-| File | What it is |
-| --- | --- |
-| `build/Desert-1.1.0.zip` | Installable plugin: both themes **and** both editor schemes |
-| `build/desert.icls` | Dark editor colour scheme only |
-| `build/desert-light.icls` | Light editor colour scheme only |
+```sh
+./gradlew runIde
+```
 
-`build.sh` also checks that the two themes stay structurally identical — same
-editor-scheme keys, same `ui` keys. A key added to one and not the other fails
-the build rather than quietly leaving light and dark to drift apart.
+Launches a sandboxed IDE with the plugin already loaded. This is the fastest
+way to iterate: change a colour, re-run, look at it. The sandbox keeps its own
+settings, so it will not disturb your real IDE.
+
+```sh
+./gradlew verifyPlugin
+```
+
+Runs JetBrains' plugin verifier against the built artifact — worth doing before
+publishing.
+
+All three depend on `checkThemeParity`, a task in `build.gradle.kts` that fails
+the build if the dark and light themes stop defining the same keys (339 editor
+scheme keys, 525 `ui` keys each) or if a colour reference does not resolve. It
+also rejects `baseAttributes`, which silently resolves to nothing once a scheme
+is saved and leaves those keys rendering as plain text.
 
 ## Install
 
-**Script** — installs into every JetBrains IDE found on this machine:
+**For iterating** — use `./gradlew runIde` rather than installing.
 
-```sh
-./build.sh && ./install.sh
+**For real use** — Settings → Plugins → ⚙ → *Install Plugin from Disk…* → pick
+`build/distributions/desert-1.1.0.zip` → restart. Then Settings → Appearance &
+Behavior → Appearance → Theme → **Desert** or **Desert Light**.
+
+**Editor colours only** — if you would rather keep your current IDE chrome:
+Settings → Editor → Color Scheme → ⚙ → *Import Scheme…* → pick
+`src/main/resources/themes/Desert.xml` or `DesertLight.xml`.
+
+Pick one route or the other, not both — an imported scheme shadows the
+plugin's. See [Troubleshooting](#troubleshooting).
+
+## Versioning
+
+`gradle.properties` holds the coordinates:
+
+```properties
+pluginVersion = 1.1.0
+pluginSinceBuild = 213
+platformVersion = 2024.3
 ```
 
-Restart the IDE, then Settings → Appearance & Behavior → Appearance → Theme →
-**Desert**. `./install.sh WebStorm` limits it to one IDE, `./install.sh
---uninstall` removes it again. This just unpacks the zip into each IDE's
-`plugins/` directory — exactly what the UI route below does.
+`pluginVersion` names the distribution zip and is written into `plugin.xml` at
+build time by `patchPluginXml` — `plugin.xml` itself carries no `<version>` or
+`<idea-version>`. `platformVersion` only decides which IDE `runIde` launches
+and which one the verifier checks against; a theme contains no code, so it does
+not affect what the plugin supports.
 
-**UI** — Settings → Plugins → ⚙ → *Install Plugin from Disk…* → pick
-`build/Desert-1.1.0.zip` → restart → set the theme as above.
+## Signing and publishing
 
-**Editor colours only** — if you'd rather keep your current IDE chrome and just
-take the syntax colours: Settings → Editor → Color Scheme → ⚙ →
-*Import Scheme…* → pick `build/desert.icls` → choose **Desert**.
+Both need credentials. **None of them belong in this repository** —
+`gradle.properties` here is committed and holds only version numbers. Put them
+in `~/.gradle/gradle.properties` instead, which Gradle reads for every build on
+your machine and which is never part of any repo.
 
-Note that installing the plugin makes Desert *available*; it doesn't switch
-your theme. You pick it in Settings.
+### One-time: generate a signing key
+
+The Marketplace requires signed plugins. Generate a 4096-bit key and a
+self-signed certificate chain, somewhere outside this repo:
+
+```sh
+mkdir -p ~/.gradle/desert-signing && cd ~/.gradle/desert-signing
+
+# 1. private key, encrypted with a passphrase you choose
+openssl genpkey -aes-256-cbc -algorithm RSA \
+  -out private_encrypted.pem -pkeyopt rsa_keygen_bits:4096
+
+# 2. the unencrypted RSA form the signer actually reads
+openssl rsa -in private_encrypted.pem -out private.pem
+
+# 3. the certificate chain
+openssl req -key private.pem -new -x509 -days 365 -out chain.crt
+
+chmod 600 private.pem private_encrypted.pem
+```
+
+Keep these files. Losing them means you cannot publish an update that the
+Marketplace will accept as the same author.
+
+### One-time: get a Marketplace token
+
+Generate one at
+[plugins.jetbrains.com/author/me/tokens](https://plugins.jetbrains.com/author/me/tokens)
+→ *Generate Token*. Copy it immediately — it is shown once.
+
+### Put the four keys in `~/.gradle/gradle.properties`
+
+Create the file if it does not exist:
+
+```properties
+# JetBrains plugin signing (paths, not contents - `~` is expanded)
+desert.signing.certificateChainFile = ~/.gradle/desert-signing/chain.crt
+desert.signing.privateKeyFile       = ~/.gradle/desert-signing/private.pem
+desert.signing.password             = your-key-passphrase
+
+# JetBrains Marketplace
+desert.publishing.token             = perm:xxxxxxxxxxxxxxxxxxxx
+```
+
+```sh
+chmod 600 ~/.gradle/gradle.properties
+```
+
+| Key | What it is |
+| --- | --- |
+| `desert.signing.certificateChainFile` | Path to `chain.crt` from step 3 |
+| `desert.signing.privateKeyFile` | Path to `private.pem` from step 2 |
+| `desert.signing.password` | The passphrase you chose in step 1 |
+| `desert.publishing.token` | Marketplace permanent token |
+
+These are **paths**, not file contents. The private key and certificate are
+multi-line PEM, which a `.properties` file cannot hold without escaping every
+newline — pointing at the files avoids that entirely.
+
+### On CI
+
+Do not use a properties file. The build falls back to environment variables,
+which is what a CI secret store provides:
+
+| Environment variable | Replaces |
+| --- | --- |
+| `PRIVATE_KEY_PASSWORD` | `desert.signing.password` |
+| `PUBLISH_TOKEN` | `desert.publishing.token` |
+
+For the key and certificate on CI, write the secrets to temporary files during
+the job and pass their paths with
+`-Pdesert.signing.privateKeyFile=... -Pdesert.signing.certificateChainFile=...`.
+
+### Publish
+
+```sh
+./gradlew publishPlugin
+```
+
+`signPlugin` runs automatically first. Bump `pluginVersion` in
+`gradle.properties` before each release — the Marketplace rejects a version it
+has already seen.
+
+To check signing without publishing:
+
+```sh
+./gradlew signPlugin verifyPluginSignature
+```
+
+Everything above is inert for ordinary builds. `buildPlugin` and `runIde` never
+read these properties, so you can ignore this whole section until you publish.
 
 ## Layout
 
 ```
+build.gradle.kts                 IntelliJ Platform Gradle Plugin, repositories,
+                                 and the checkThemeParity task
+settings.gradle.kts              project name
+gradle.properties                plugin and platform versions
 src/main/resources/
-  META-INF/plugin.xml            plugin descriptor
-  themes/desert.theme.json       IDE chrome, dark
-  themes/desert.xml              editor colour scheme, dark
-  themes/desert-light.theme.json IDE chrome, light
-  themes/desert-light.xml        editor colour scheme, light
+  META-INF/plugin.xml            plugin descriptor, two themeProviders
+  themes/Desert.theme.json       IDE chrome, dark
+  themes/Desert.xml              editor colour scheme, dark
+  themes/DesertLight.theme.json  IDE chrome, light
+  themes/DesertLight.xml         editor colour scheme, light
 MAPPING.md                       every vim group → IntelliJ key, and why
-build.sh                         validate + package
-install.sh                       install into local IDEs
+LICENSE                          MIT, plus attribution for the vim original
 ```
 
-The layout is the standard Gradle resource layout, so dropping in the
-IntelliJ Platform Gradle Plugin later works without moving anything.
+Each `*.theme.json` is named after the `name` it declares, matching the
+platform's convention, and is registered by its own `<themeProvider>` in
+`plugin.xml`.
 
 ## Dark and light
 
@@ -84,13 +225,13 @@ stay sky blue, keywords stay khaki, functions stay green. The ground is
 desert's own sand `#c2bfa5` lightened to parchment.
 
 A handful of keys can't be derived by hue alone and are set explicitly in
-`desert-light.xml` — search highlights (which must stay light backgrounds with
+`DesertLight.xml` — search highlights (which must stay light backgrounds with
 dark text) and the ANSI console slots (where `black` must stay dark and
 `white` must stay readable).
 
 ## Tweaking
 
-`desert.theme.json` routes every UI colour through a named colour at the top of
+`Desert.theme.json` routes every UI colour through a named colour at the top of
 the file, so most changes are one line. Two you may actually want:
 
 - **Tan status bar.** desert.vim's signature is a `#c2bfa5` status line with
@@ -99,16 +240,16 @@ the file, so most changes are one line. Two you may actually want:
   full vim look, set `desertStatusBarBg` to `#c2bfa5` and `desertStatusBarFg`
   to `#000000`.
 - **TODO highlighting.** Faithfully orangered-on-yellow2, which is loud in a
-  gutter-wide IDE. Soften `TODO_DEFAULT_ATTRIBUTES` in `desert.xml`.
+  gutter-wide IDE. Soften `TODO_DEFAULT_ATTRIBUTES` in `Desert.xml`.
 
-After editing, re-run `./build.sh` and reinstall the zip.
+After editing, re-run `./gradlew runIde` to see the change.
 
 ## Troubleshooting
 
 **Colours don't change no matter how often you reinstall.** You probably
-imported `build/desert.icls` at some point *and* installed the plugin. Both
+imported `Desert.xml` as a scheme at some point *and* installed the plugin. Both
 register a scheme called "Desert", and the imported one wins — so the plugin
-installs correctly and is then ignored. `install.sh` warns when it spots this.
+installs correctly and is then ignored.
 Fix it by quitting the IDE (config is rewritten on exit, so deleting it while
 the IDE runs won't stick), removing the file, and restarting:
 
@@ -121,7 +262,7 @@ Pick one delivery route or the other, not both.
 **Comments render white.** Symptom of the same thing. The IDE rewrites
 `baseAttributes="DEFAULT_COMMENT"` to `baseAttributes=""` when it saves an
 imported scheme, and an empty inherit resolves to plain text. Every attribute
-in `desert.xml` is set explicitly for this reason — never reintroduce
+in `Desert.xml` is set explicitly for this reason — never reintroduce
 `baseAttributes`.
 
 ## Credit

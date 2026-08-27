@@ -1,0 +1,29 @@
+<idea-plugin>
+  <id>com.dallinjones.jetbrains.desert</id>
+  <name>Desert</name>
+  <vendor>Dallin Jones</vendor>
+
+  <description><![CDATA[
+    <p><b>Desert</b> is a port of Hans Fugal's classic
+    <a href="https://github.com/fugalh/desert.vim">desert.vim</a> colour scheme
+    to the JetBrains platform.</p>
+    <p>Warm sand and khaki on a soft charcoal background, with sky-blue comments,
+    pale-green functions and olive selections - the same palette vim users have
+    been staring at since 2003.</p>
+    <p>Ships two themes: <b>Desert</b>, a transcription of the vim original,
+    and <b>Desert Light</b>, a derived light counterpart on a parchment ground
+    taken from desert's own sand. Each comes with a matching editor scheme.</p>
+  ]]></description>
+
+  <!-- Platform-only dependency: installs in every JetBrains IDE
+       (IntelliJ IDEA, PyCharm, WebStorm, PhpStorm, GoLand, RubyMine,
+        CLion, Rider, DataGrip, RustRover, Android Studio, Aqua...). -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <themeProvider id="6f2f8a1e-3c7d-4a15-9b0e-desert00vim1"
+                   path="/themes/Desert.theme.json"/>
+    <themeProvider id="6f2f8a1e-3c7d-4a15-9b0e-desert00vim2"
+                   path="/themes/DesertLight.theme.json"/>
+  </extensions>
+</idea-plugin>

@@ -1,17 +1,44 @@
+# --- Gradle -----------------------------------------------------------------
+.gradle/
 build/
+out/
+.kotlin/
 
-# vscode
-.vscode
+# The wrapper IS committed on purpose - gradlew, gradlew.bat and
+# gradle/wrapper/ are what let someone build without installing Gradle.
+# Do not add a blanket *.jar rule; it would swallow gradle-wrapper.jar.
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
 
-# Intellij
+# --- IntelliJ Platform Gradle Plugin ----------------------------------------
+# Sandbox IDE that `runIde` launches, plus its product-release cache.
+.intellijPlatform/
+
+# --- Credentials ------------------------------------------------------------
+# `signPlugin` and `publishPlugin` need a certificate chain, a private key and
+# a Marketplace token. Keep them in environment variables or in
+# ~/.gradle/gradle.properties - never in this repo. gradle.properties here is
+# committed and holds only version numbers.
+local.properties
+secrets.properties
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.key
+chain.crt
+
+# --- Editors ----------------------------------------------------------------
+.idea/
 *.iml
-.idea
+*.ipr
+*.iws
+.vscode/
+.fleet/
 
-# npm
-node_modules
-
-# Exclude sourcemaps
-*.map
-
-# Exclude macOS Finder (System Explorer) View States
+# --- OS ---------------------------------------------------------------------
 .DS_Store
+Thumbs.db
